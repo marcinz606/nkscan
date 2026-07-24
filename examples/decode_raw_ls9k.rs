@@ -4,7 +4,7 @@ use clap::Parser;
 use image::ImageFormat;
 use nkscan::scanners::ls9000ed::{
     CcdMode, Dpi, Multisample, ScanSettings, Window,
-    decode::{FrameDecoder, FrameView},
+    decode::{FrameDecoder, FrameView, InterleaveDecoder},
 };
 use std::{
     fs::File,
@@ -71,7 +71,7 @@ fn main() {
     };
 
     // Setup the decoder state
-    let mut dec = FrameDecoder::new(&settings).expect("layout");
+    let mut dec = InterleaveDecoder::new(&settings).expect("layout");
     let (w, h) = settings.output_dims().unwrap();
     println!(
         "{}x{}  stages={:?} readouts={} block={}  expect {:?} bytes",

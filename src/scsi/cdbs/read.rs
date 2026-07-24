@@ -39,7 +39,7 @@ pub enum DataTypeCode {
 }
 
 impl DataTypeCode {
-    fn to_byte(self) -> u8 {
+    pub(super) fn to_byte(self) -> u8 {
         match self {
             DataTypeCode::Image => 0x00,
             DataTypeCode::HalftoneMask => 0x02,

@@ -181,7 +181,9 @@ pub struct WindowDescriptor {
     bit_ordering: u16,
     compression: CompressionType,
     compression_arg: u8,
-    vendor: Vec<u8>,
+    /// Vendor-specific descriptor tail (bytes 40..). Nikon stores the
+    /// firmware-measured per-channel exposure here.
+    pub vendor: Vec<u8>,
 }
 
 impl WindowDescriptor {
