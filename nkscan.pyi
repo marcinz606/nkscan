@@ -42,6 +42,19 @@ class Capabilities:
     def y_dpi_range(self) -> tuple[builtins.int, builtins.int]: ...
     @property
     def optical_dpi(self) -> builtins.int: ...
+    @property
+    def multiline_read(self) -> builtins.bool:
+        r"""
+        Whether the unit reads the CCD three rows at once, the faster of the two
+        reads. Where it does not, every scan is one row at a time and
+        `scan_frame`'s `superfine` is the only thing it will do
+        """
+    @property
+    def multi_reading(self) -> builtins.bool:
+        r"""
+        Whether the unit honours repeated reads of a line, so `scan_frame`'s
+        `samples` above 1 means anything
+        """
 
 @typing.final
 class Device:

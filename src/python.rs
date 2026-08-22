@@ -9,7 +9,10 @@ use crate::{
     device::{self, Device as RustDevice},
     error::Error,
     protocol::{
-        caps::{Capabilities as RustCapabilities, set_window::ColorInterleaving},
+        caps::{
+            Capabilities as RustCapabilities,
+            set_window::{ColorInterleaving, ScanMode},
+        },
         data::Rect,
         decode::Samples,
         window::Channel,
@@ -143,6 +146,13 @@ pub struct PyCapabilities {
     x_dpi_range: (u16, u16),
     y_dpi_range: (u16, u16),
     optical_dpi: u16,
+    /// Whether the unit reads the CCD three rows at once, the faster of the two
+    /// reads. Where it does not, every scan is one row at a time and
+    /// `scan_frame`'s `superfine` is the only thing it will do
+    multiline_read: bool,
+    /// Whether the unit honours repeated reads of a line, so `scan_frame`'s
+    /// `samples` above 1 means anything
+    multi_reading: bool,
 }
 
 impl From<&RustCapabilities> for PyCapabilities {
@@ -161,6 +171,11 @@ impl From<&RustCapabilities> for PyCapabilities {
                 caps.address.y_axis.dpi_range.last,
             ),
             optical_dpi: caps.address.x_axis.optical_dpi,
+            multiline_read: caps
+                .set_window
+                .interleaving
+                .contains(ColorInterleaving::MULTILINE_SIMULTANEOUS),
+            multi_reading: caps.set_window.mode.contains(ScanMode::MULTI_READING),
         }
     }
 }
